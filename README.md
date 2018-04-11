@@ -47,7 +47,8 @@ Please see example files **sigma_out.gvector.txt** and **mosaic.txt** (examples 
 
 In the near future, SigmatoMosaic.sh will have:<br/>
 -Incorrect file format detection.<br/>
--Placeholder zeros when organism wasn't identified (per file), so you'll be able to map the relative abundances to specific sigma_out.gvector.txt input files.
+-Placeholder zeros when organism wasn't identified (per file), so relative abundances will be mapped to specific 
+sigma_out.gvector.txt input files.
 
 ## Credits
 
