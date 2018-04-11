@@ -11,7 +11,8 @@ Challenge: Strains ([MOSAIC Community Challenge: Strains](https://platform.mosai
 A prerequisite to getting useful output from this shell script is to setup your reference genome directory correctly.<br/>
 First, your reference genome directory should have the following structure:<br/><br/>
 `[database directory] - [genome directory] - [fasta file]`<br/><br/>
-To create this required reference genome directory, use the shell script **GCFrefgenomedirectory.sh**.  This shell script will correct set-up your
+To create this required reference genome directory, use the shell script **GCFrefgenomedirectory.sh**.  This shell script will 
+correctly set-up your
 reference genome directory, assuming you have downloaded GCF ([RefSeq assembly](https://www.ncbi.nlm.nih.gov/assembly/model/)) 
 sequences.<br/><br/>
 This shell script will change your initial reference genome directory setup of `[database directory] - [fasta file]` to the required
