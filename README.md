@@ -14,7 +14,7 @@ challenge has four datasets:<br/><br/>
 `Simulated_Medium_Complexity`<br/>
 `Simulated_High_Complexity`<br/>
 `RealData (Mouse fecal samples)`<br/><br/>
-Each of these datasets contains four sets of paired-end sequencing reads, so in reality:<br/>
+Each of these datasets contains four sets of paired-end sequencing reads, so in reality:<br/><br/>
 `Simulated_Low_Complexity`<br/>
 `-sim_low_S1_PE1.fq`<br/>
 `-sim_low_S1_PE2.fq`<br/>
