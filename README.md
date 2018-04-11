@@ -6,11 +6,18 @@ File format converters are essential for a host of data conversion needs, from l
 conversions.  This shell script is a format converter used to transform the output of [SigmaW](http://sigma.omicsbio.org/) (Strain-level Inference of Genomes from Metagenomic Analysis), **sigma_out.gvector.txt**, into the format accepted for the Mosaic Community 
 Challenge: Strains ([MOSAIC Community Challenge: Strains](https://platform.mosaicbiome.com/challenges/1)).  
 
-## Usage
+## Setting up the Reference Genome Directory
 
-A prerequisiste to getting useful output from this shell script is to setup your reference genome directory correctly.<br/>
+A prerequisite to getting useful output from this shell script is to setup your reference genome directory correctly.<br/>
 First, your reference genome directory should have the following structure:<br/><br/>
-`[database directory] - [genome directory] - [fasta file]`<br/>
+`[database directory] - [genome directory] - [fasta file]`<br/><br/>
+To create this required reference genome directory, use the shell script **wiwijwff**.  This shell script will correct set-up your
+reference genome directory, assuming you have downloaded GCF ([RefSeq assembly](https://www.ncbi.nlm.nih.gov/assembly/model/)) 
+sequences.<br/><br/>
+**wiwijwff:**<br/>
+Provide the path of the directory that contains the initial `[database directory]` as a command line argument.
+
+## Usage
 
 This script is very easy to use, it takes **sigma_out.gvector.txt** as command line arguments.  Keep in mind, the Strains community
 challenge has four datasets:<br/><br/>
