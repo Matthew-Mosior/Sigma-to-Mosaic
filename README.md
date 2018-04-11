@@ -42,13 +42,13 @@ Each of these datasets contains four sets of paired-end sequencing reads, so in 
 `RealData (Mouse fecal samples)`<br/>
 `...`<br/><br/>
 Since each set of paired-end sequencing reads (i.e. sim_low_S1_PE1.fq and sim_low_S1_PE2.fq) are run together to output a 
-**single** sigma_out.gvector.txt file, you should be running the script **for each dataset** as follows:<br/>
+**single** sigma_out.gvector.txt file, you should be running the script **for each dataset** as follows:<br/><br/>
 `sh SigmatoMosaic.sh sigma1_out.gvector.txt sigma2_out.gvector.txt sigma3_out.gvector.txt sigma4_out.gvector.txt`<br/>
 **&ast;Since all output files are named sigma_out.gvector.txt, you'll need to rename them so that they are all unique, as shown 
 above.**<br/><br/>
 If you have sigma_out.gvector.txt files with many identified organisms (lines that start with "**&ast;**"), it may be wise to do 
-the following:<br/>
-`nohup sh SigmatoMosaic.sh sigma1_out.gvector.txt sigma2_out.gvector.txt sigma3_out.gvector.txt sigma4_out.gvector.txt &`<br/>
+the following:<br/><br/>
+`nohup sh SigmatoMosaic.sh sigma1_out.gvector.txt sigma2_out.gvector.txt sigma3_out.gvector.txt sigma4_out.gvector.txt &`<br/><br/>
 This will run the script in the background after you logout (nohup) and puts the process into a subshell (&), which allows you
 to continue to work in the current terminal session, and will keep it running once you logout.<br/><br/>
 Running SigmatoMosaic.sh will output a single file, **mosaic.txt**.<br/><br/>
