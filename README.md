@@ -14,8 +14,13 @@ First, your reference genome directory should have the following structure:<br/>
 To create this required reference genome directory, use the shell script **GCFrefgenomedirectory.sh**.  This shell script will correct set-up your
 reference genome directory, assuming you have downloaded GCF ([RefSeq assembly](https://www.ncbi.nlm.nih.gov/assembly/model/)) 
 sequences.<br/><br/>
-**GCFrefgenomedirectory.sh:**<br/>
-Provide the path of the directory that contains the initial `[database directory]` as a command line argument.
+This shell script will change your initial reference genome directory setup of `[database directory] - [fasta file]` to the required
+reference genome directory setup: `[database directory] - [genome directory] - [fasta file]`.<br/><br/>
+Provide the path to the directory that contains the initial `[database directory]` as a command line argument as shown in the following 
+example:<br/><br/>
+`sh GCFrefgenomedirectory.sh /usr/home/ncbi/ncbi-genomes-2018-02-17`<br/><br/>
+
+
 
 ## Usage
 
