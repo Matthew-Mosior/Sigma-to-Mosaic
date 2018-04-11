@@ -9,11 +9,11 @@ Challenge: Strains ([MOSAIC Community Challenge: Strains](https://platform.mosai
 ## Usage
 
 This script is very easy to use, it takes **sigma_out.gvector.txt** as command line arguments.  Keep in mind, the Strains community
-challenge has four datasets:<br/>
+challenge has four datasets:<br/><br/>
 `Simulated_Low_Complexity`<br/>
 `Simulated_Medium_Complexity`<br/>
 `Simulated_High_Complexity`<br/>
-`RealData (Mouse fecal samples)`<br/>
+`RealData (Mouse fecal samples)`<br/><br/>
 Each of these datasets contains four sets of paired-end sequencing reads, so in reality:<br/>
 `Simulated_Low_Complexity`<br/>
 `-sim_low_S1_PE1.fq`<br/>
