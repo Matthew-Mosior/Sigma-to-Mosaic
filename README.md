@@ -41,7 +41,7 @@ the following:<br/>
 This will run the script in the background after you logout (nohup) and puts the process into a subshell (&), which allows you
 to continue to work in the current terminal session, and will keep it running once you logout.<br/><br/>
 Running SigmatoMosaic.sh will output a single file, **mosaic.txt**.<br/><br/>
-Please see examples files **sigma_out.gvector.txt** and **mosaic.txt** for real examples of input and output. 
+Please see example files **sigma_out.gvector.txt** and **mosaic.txt** for real examples of input and output. 
 
 ## Roadmap 
 
