@@ -34,9 +34,16 @@ Since each set of paired-end sequencing reads (i.e. sim_low_S1_PE1.fq and sim_lo
 **single** sigma_out.gvector.txt file, you should be running the script **for each dataset** as follows:<br/>
 `sh SigmatoMosaic.sh sigma1_out.gvector.txt sigma2_out.gvector.txt sigma3_out.gvector.txt sigma4_out.gvector.txt`<br/>
 **&ast;Since all output files are named sigma_out.gvector.txt, you'll need to rename them so that they are all unique, as shown 
-above**<br/>
+above.**<br/><br/>
 If you have sigma_out.gvector.txt files with many identified organisms (lines that start with "**&ast;**"), it may be wise to do 
 the following:<br/>
 `nohup sh SigmatoMosaic.sh sigma1_out.gvector.txt sigma2_out.gvector.txt sigma3_out.gvector.txt sigma4_out.gvector.txt &`<br/>
 This will run the script in the background after you logout (nohup) and puts the process into a subshell (&), which allows you
-to continue to work in the current terminal session, and will keep it running once you logout.   
+to continue to work in the current terminal session, and will keep it running once you logout.<br/><br/>
+Running SigmatoMosaic.sh will output a single file, **mosaic.txt**.<br/><br/>
+Please see examples files **sigma_out.gvector.txt** and **mosaic.txt** for real examples of input and output. 
+
+## Roadmap 
+
+SigmatoMosaic.sh will continue to 
+
