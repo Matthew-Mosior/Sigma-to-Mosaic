@@ -16,18 +16,18 @@ challenge has four datasets:<br/><br/>
 `RealData (Mouse fecal samples)`<br/><br/>
 Each of these datasets contains four sets of paired-end sequencing reads, so in reality:<br/><br/>
 `Simulated_Low_Complexity`<br/>
-`-sim_low_S1_PE1.fq`<br/>
-`-sim_low_S1_PE2.fq`<br/>
-`-sim_low_S2_PE1.fq`<br/>
-`-sim_low_S2_PE2.fq`<br/>
-`-sim_low_S3_PE1.fq`<br/>
-`-sim_low_S3_PE2.fq`<br/>
-`-sim_low_S4_PE1.fq`<br/>
-`-sim_low_S4_PE2.fq`<br/>
+`sim_low_S1_PE1.fq`<br/>
+`sim_low_S1_PE2.fq`<br/>
+`sim_low_S2_PE1.fq`<br/>
+`sim_low_S2_PE2.fq`<br/>
+`sim_low_S3_PE1.fq`<br/>
+`sim_low_S3_PE2.fq`<br/>
+`sim_low_S4_PE1.fq`<br/>
+`sim_low_S4_PE2.fq`<br/><br/>
 `Simulated_Medium_Complexity`<br/>
-`...`<br/>
+`...`<br/><br/>
 `Simulated_High_Complexity`<br/>
-`...`<br/>
+`...`<br/><br/>
 `RealData (Mouse fecal samples)`<br/>
 `...`<br/><br/>
 Since each set of paired-end sequencing reads (i.e. sim_low_S1_PE1.fq and sim_low_S1_PE2.fq) are run together to output a 
