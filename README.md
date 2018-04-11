@@ -49,3 +49,6 @@ In the near future, SigmatoMosaic.sh will have:<br/>
 -Incorrect file format detection.<br/>
 -Placeholder zeros when organism wasn't identified (per file), so you'll be able to map the relative abundances to specific sigma_out.gvector.txt input files.
 
+## Credits
+
+The SigmatoMosiac.sh script and documentation was created by [Matthew Mosior](https://github.com/Matthew-Mosior), April 2018.
