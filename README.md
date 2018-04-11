@@ -29,8 +29,7 @@ Each of these datasets contains four sets of paired-end sequencing reads, so in 
 `Simulated_High_Complexity`<br/>
 `...`<br/>
 `RealData (Mouse fecal samples)`<br/>
-`...`<br/>
-<br/>
+`...`<br/><br/>
 Since each set of paired-end sequencing reads (i.e. sim_low_S1_PE1.fq and sim_low_S1_PE2.fq) are run together to output a 
 **single** sigma_out.gvector.txt file, you should be running the script **for each dataset** as follows:<br/>
 `sh SigmatoMosaic.sh sigma1_out.gvector.txt sigma2_out.gvector.txt sigma3_out.gvector.txt sigma4_out.gvector.txt`<br/>
