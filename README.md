@@ -60,9 +60,9 @@ to continue to work in the current terminal session, and will keep it running on
 Running SigmatoMosaic.sh will output a single file, **mosaic.txt**.<br/><br/>
 Please see example files **sigma_out.gvector.txt** and **mosaic.txt** (examples of input and output). 
 
-## Roadmap 
+## Update to Roadmap (05/31/2018) 
 
-In the near future, SigmatoMosaic.sh will have:<br/>
+SigmatoMosaic.sh now has the following features:<br/>
 -Incorrect file format detection.<br/>
 -Placeholder zeros when organism wasn't identified (per file), so relative abundances will be mapped to specific 
 sigma_out.gvector.txt input files.
