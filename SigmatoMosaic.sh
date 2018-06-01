@@ -1,6 +1,19 @@
 echo "This shell script converts sigma_out.gvector.txt GCF identifiers to organism specific taxonomy ids (Taxids) with corresponding relative abundances."
 sleep 5
 filecount=1
+
+##Perform incorrect file format detection.
+for var in "$@"
+do
+        if ! head -1 "$var" | egrep -q '^#\s\+\sGvectorName\sTotalNumberReads\sNumberMappedReads\sNumberUnmappedReads$' 
+	then
+		echo "Incorrect file format detected.  Please input correct sigma.out_gvector.txt file(s)."
+		echo "This program is now terminating."
+		exit 1
+	fi	
+done
+
+##Start shell scipt.
 for var in "$@"
 do
 echo "Running "$var"."
@@ -74,12 +87,14 @@ do
 	rm GCF_variables.txt
 	rm GCF_variables1.txt
 done < relabunsubscripts.txt
+echo "%" >> mosaic_large.txt
 sleep 5
 done
 
 cat mosaic_large.txt | tr ' \t\n\r' '-' >> mosaic_large_new.txt
 sed -i 's/--/\n/g' mosaic_large_new.txt
 sed -i 's/-/,/g' mosaic_large_new.txt
+sed -i 's/%,/%\n/' mosaic_large_new.txt
 rm mosaic_large.txt
 mv mosaic_large_new.txt mosaic_large.txt
 
@@ -87,7 +102,7 @@ mv mosaic_large_new.txt mosaic_large.txt
 #mosaic_large.txt has all GCFs with associated taxonomic ranks with relative abundances from all input files.
 #Sort mosaic_large on species level taxids, compress to only uniq GCF species only taxid enumeration, and correctly enumerate.
 
-cat mosaic_large.txt | sed 's/,/- /' | rev | sed 's/,/-/' | sed 's/^[^-]*-//1' | sed 's/,/-/' | sed 's/,/- /' | rev | sed 's/ [^ ]* -//' | rev |  sed 's/-/\t/' | sed 's/-/\t/' | rev | sort -k2 | uniq > mosaic_large_uniq.txt
+cat mosaic_large.txt | sed 's/%//' | sed 's/,/- /' | rev | sed 's/,/-/' | sed 's/^[^-]*-//1' | sed 's/,/-/' | sed 's/,/- /' | rev | sed 's/ [^ ]* -//' | rev |  sed 's/-/\t/' | sed 's/-/\t/' | rev | sort -k2 | uniq | sed '/^\s*$/d' > mosaic_large_uniq.txt
 
 cat mosaic_large_uniq.txt | rev | sed 's/^[^\t]*\t/1\t/' | rev > mosaic_large_uniq_new.txt
 rm mosaic_large_uniq.txt
@@ -124,6 +139,7 @@ do
 
 done < mosaic_large_uniq.txt
 
+
 #Utilize mosaic_large_uniq.txt as a dictionary and update enumerations of mosaic_large.txt
 
 linecounter1=1
@@ -154,37 +170,58 @@ done < mosaic_large.txt
 
 #After updating enumeration, remove GCF.
 
-linecounter2=1
-
 cat mosaic_large.txt | sed 's/^[^,]*,//' | sed 's/^t[^,]*,//' > mosaic_large_withoutGCF.txt
-cat mosaic_large_withoutGCF.txt | rev | sed 's/^[^,]*,//' | rev | sort -n | uniq > mosaic_large_withoutGCF_withoutrelabun_uniq.txt
+cat mosaic_large_withoutGCF.txt | sed 's/%//' | sed '/^\s*$/d' | rev | sed 's/^[^,]*,//' | rev | sort -n | uniq > mosaic_large_withoutGCF_withoutrelabun_uniq.txt
 
 
 #Compress species specific enumeration.
 
+linecounter2=1
+dotcounter=0
+
 while read lines
 do
-	compressedspecies=$(echo "$lines")	
+	if ! [[ "$lines"  == *"%"* ]]
+	then
+		uncompressedspecies=$(echo "$lines" | rev | sed 's/^[^,]*,//' | rev)
+               	uncompressedrelabun=$(echo "$lines" |  rev | sed 's/,.*$//' | rev)
+              	uncompressedraw=$(echo "$uncompressedrelabun" / 100 | bc -l | sed 's/^/0/')
+	
+		while read line
+		do
+			compressedspecies=$(echo "$line" | sed 's/\s.*//')
 
-	while read line
-	do
-		uncompressedspecies=$(echo "$line" | rev | sed 's/^[^,]*,//' | rev)
-		uncompressedrelabun=$(echo "$line" |  rev | sed 's/,.*$//' | rev)
-		uncompressedraw=$(echo "$uncompressedrelabun" / 100 | bc -l | sed 's/^/0/')		
+			if [ "$compressedspecies" == "$uncompressedspecies" ]
+			then
+				sed -i "${linecounter2}s/$/\\t"$uncompressedraw"/" mosaic_large_withoutGCF_withoutrelabun_uniq.txt
+			fi
+		
+			((linecounter2++))
 
-		if [ "$compressedspecies" == "$uncompressedspecies" ]
-		then
-			sed -i ${linecounter2}s/$/\\t"$uncompressedraw"/ mosaic_large_withoutGCF_withoutrelabun_uniq.txt
-		fi
+		done < mosaic_large_withoutGCF_withoutrelabun_uniq.txt
+	else
+                ((dotcounter++))
+                sed -i "/\([^.]*\.\)\{"$dotcounter"\}/! s/$/\t0.00000000000000000000/" mosaic_large_withoutGCF_withoutrelabun_uniq.txt
+        fi
 
-	done < mosaic_large_withoutGCF.txt 	
+	linecounter2=1
 
-((linecounter2++))
+done < mosaic_large_withoutGCF.txt
 
-done < mosaic_large_withoutGCF_withoutrelabun_uniq.txt
+
+#Add header.
+
+sed -i '1s/^/\t\t\n/' mosaic_large_withoutGCF_withoutrelabun_uniq.txt
+
+for var in "$@"
+do
+	sed -i "1s/$/\\t"$var"/" mosaic_large_withoutGCF_withoutrelabun_uniq.txt
+done
+
+sed -i '1s/^/FullTaxonomicRank\t/' mosaic_large_withoutGCF_withoutrelabun_uniq.txt
+
 
 #Clean up and return final file.
-
 
 mv mosaic_large_withoutGCF_withoutrelabun_uniq.txt final.txt
 cat final.txt | column -t > final1.txt
