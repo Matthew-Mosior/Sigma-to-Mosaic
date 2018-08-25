@@ -22,7 +22,8 @@ import System.IO
 
 {-Type definitions and corresponding function definitions.-}
    
-{-Pure Functions.-} 
+{-Pure Functions.-}
+
 --linefeed -> To feed file into nested list line by line, delimited by whitespace.
 linefeed :: String -> [[String]]
 linefeed xs = map words (lines xs)
