@@ -126,6 +126,6 @@ For maximum performance, please compile the source code.
 
 ## Credits
 
-The Shell implementation and documentation was added April 2018.<br/><br/>
-The Haskell implementation and documentation was added August 2018.<br/><br/>
+Shell implementation and documentation added April 2018.<br/><br/>
+Haskell implementation and documentation added August 2018.<br/><br/>
 Author : [Matthew Mosior](https://github.com/Matthew-Mosior)
