@@ -14,6 +14,7 @@ import Text.Regex
 import Network.FTP.Client
 import Network.HTTP.Conduit
 import qualified Data.ByteString.Lazy.Char8 as C
+import System.Directory
 import System.Environment
 import System.IO.Temp
 import System.IO
@@ -22,13 +23,11 @@ import System.IO
 
 {-Type definitions and corresponding function definitions.-}
    
-{-Pure Functions.-}
+{-Pure Functions.-} 
 
 --linefeed -> To feed file into nested list line by line, delimited by whitespace.
 linefeed :: String -> [[String]]
 linefeed xs = map words (lines xs)
-
-{----------------------------------------------------------}
 
 {-General utility functions.-}
 
@@ -397,6 +396,10 @@ main = do
                                      let final = finalprintlist (specificgrablist (alltolist (sorttaxadder (taxadder (zeroadder (taxgrouper fulltempread) (allfilenameparser cmdargs)))))) (allfilenameparser cmdargs)
                                      --Print to Mosaic.txt. 
                                      writeFile "Mosaic.txt" $ (intercalate "\n" (map (intercalate "\t") final) ++ "\n") 
+                                     --Close temporary file.
+                                     hClose temph
+                                     --Delete temporary file.
+                                     removeFile tempfile
         _                     -> error "Please supply four filepaths."
  
 {----------------}
