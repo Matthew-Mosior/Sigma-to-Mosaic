@@ -298,7 +298,7 @@ taxadder :: [[(String,String,String)]] -> [[(String,String,String,String)]]
 taxadder [[]] = [[]]
 taxadder (x:xs) = (singlenest $ (map (\(a,b,c) -> (a,b,c,head (sort (map (tripletfst) x)))) x)) ++ (taxadder xs) 
 
---sortzeroadder -> To sort the output of zeroadder.
+--sorttaxadder -> To sort the output of taxadder.
 sorttaxadder :: [[(String,String,String,String)]] -> [[(String,String,String,String)]]
 sorttaxadder [[]] = [[]]
 sorttaxadder xs = map (sortOn quadrupletthird) xs
@@ -395,7 +395,7 @@ main = do
                                      --Get final print ready nested list by applying all functions in Final Transformation section to fulltempread.
                                      let final = finalprintlist (specificgrablist (alltolist (sorttaxadder (taxadder (zeroadder (taxgrouper fulltempread) (allfilenameparser cmdargs)))))) (allfilenameparser cmdargs)
                                      --Print to Mosaic.txt. 
-                                     writeFile "Mosaic.txt" $ (intercalate "\n" (map (intercalate "\t") final) ++ "\n") 
+                                     writeFile "mosaic.txt" $ (intercalate "\n" (map (intercalate "\t") final)) 
                                      --Close temporary file.
                                      hClose temph
                                      --Delete temporary file.
