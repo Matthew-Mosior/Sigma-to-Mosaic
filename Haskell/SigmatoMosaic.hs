@@ -394,7 +394,7 @@ main = do
                                      fulltempread <- hGetContents temph
                                      --Get final print ready nested list by applying all functions in Final Transformation section to fulltempread.
                                      let final = finalprintlist (specificgrablist (alltolist (sorttaxadder (taxadder (zeroadder (taxgrouper fulltempread) (allfilenameparser cmdargs)))))) (allfilenameparser cmdargs)
-                                     --Print to Mosaic.txt. 
+                                     --Print to mosaic.txt. 
                                      writeFile "mosaic.txt" $ (intercalate "\n" (map (intercalate "\t") final)) 
                                      --Close temporary file.
                                      hClose temph
