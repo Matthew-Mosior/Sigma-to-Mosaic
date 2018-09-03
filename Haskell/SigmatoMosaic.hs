@@ -10,6 +10,7 @@ import Data.List
 import Data.List.Split 
 import Data.Maybe
 import Data.Tuple
+import Text.PrettyPrint.Boxes
 import Text.Regex
 import Network.FTP.Client
 import Network.HTTP.Conduit
@@ -20,8 +21,6 @@ import System.IO.Temp
 import System.IO
 
 {---------}
-
-{-Type definitions and corresponding function definitions.-}
    
 {-Pure Functions.-} 
 
@@ -321,6 +320,10 @@ finalprintlist [[]] ys     = [[]]
 finalprintlist xs   []     = [[]]
 finalprintlist [] (_:_)    = [[]]
 finalprintlist xs cmdargss = ("FullTaxonomicRank" : (head cmdargss) : (head $ (tail cmdargss)) : (last $ (take 3 cmdargss)) : (last cmdargss) : []) : xs 
+
+--prettyprintfinallist -> To Print out the output in a nice fashion.
+--prettyprintfinallist :: [[String]] -> Doc
+--prettyprintfinallist xs = (intercalate "\n" (map (intercalate "\t") xs))
  
 {--------------------------------------------------------------------}
 {------------------------}
@@ -395,7 +398,7 @@ main = do
                                      --Get final print ready nested list by applying all functions in Final Transformation section to fulltempread.
                                      let final = finalprintlist (specificgrablist (alltolist (sorttaxadder (taxadder (zeroadder (taxgrouper fulltempread) (allfilenameparser cmdargs)))))) (allfilenameparser cmdargs)
                                      --Print to mosaic.txt. 
-                                     writeFile "mosaic.txt" $ (intercalate "\n" (map (intercalate "\t") final)) 
+                                     writeFile "mosaic.txt" $ (render $ (hsep 2 left . map (vcat left) . map (map (text))) (transpose final))
                                      --Close temporary file.
                                      hClose temph
                                      --Delete temporary file.
