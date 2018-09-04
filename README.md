@@ -120,7 +120,7 @@ the following:<br/><br/>
 `nohup runghc SigmatoMosaic.hs sigma1_out.gvector.txt sigma2_out.gvector.txt sigma3_out.gvector.txt sigma4_out.gvector.txt &`<br/><br/>
 This will run the script in the background after you logout (nohup) and puts the process into a subshell (&), which allows you
 to continue to work in the current terminal session, and will keep it running once you logout.<br/><br/>
-Running SigmatoMosaic.sh will output a single file, **mosaic.txt**.<br/><br/>
+Running SigmatoMosaic.hs will output a single file, **mosaic.txt**.<br/><br/>
 Please see example files **sigma_out.gvector.txt** and **mosaic.txt** (examples of input and output).<br/><br/>
 For maximum performance, please compile the source code.
 
