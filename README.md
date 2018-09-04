@@ -73,7 +73,7 @@ sigma_out.gvector.txt input files.
 
 ### Setting up the Reference Genome Directory
 
-A prerequisite to getting useful output from this shell script is to setup your reference genome directory correctly.<br/>
+A prerequisite to getting useful output from this haskell script is to setup your reference genome directory correctly.<br/>
 First, your reference genome directory should have the following structure:<br/><br/>
 `[database directory] - [genome directory] - [fasta file]`<br/><br/>
 To create this required reference genome directory, use the shell script **GCFrefgenomedirectory.sh**.  This shell script will 
