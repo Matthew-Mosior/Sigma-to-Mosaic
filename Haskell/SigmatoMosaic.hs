@@ -320,10 +320,6 @@ finalprintlist [[]] ys     = [[]]
 finalprintlist xs   []     = [[]]
 finalprintlist [] (_:_)    = [[]]
 finalprintlist xs cmdargss = ("FullTaxonomicRank" : (head cmdargss) : (head $ (tail cmdargss)) : (last $ (take 3 cmdargss)) : (last cmdargss) : []) : xs 
-
---prettyprintfinallist -> To Print out the output in a nice fashion.
---prettyprintfinallist :: [[String]] -> Doc
---prettyprintfinallist xs = (intercalate "\n" (map (intercalate "\t") xs))
  
 {--------------------------------------------------------------------}
 {------------------------}
