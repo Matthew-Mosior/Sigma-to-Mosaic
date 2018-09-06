@@ -373,7 +373,7 @@ main = do
     cmdargs <- getArgs
     case cmdargs of
         []                    -> error "Please supply four filepaths."
-        [arg1,arg2,arg3,arg4] -> do  --Create Temporary file.
+        [arg1,arg2,arg3,arg4] -> do  --Create temporary file.
                                      (tempfile , temph) <- openTempFile "." "temp.txt"
                                      --Work on first argument.
                                      inputfile1 <- readFile arg1
