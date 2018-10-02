@@ -1,8 +1,8 @@
-{-{-SigmatoMosaic: A File Format Converter-}-}
-{-{-Author:  Matthew Mosior-}-}
-{-{-Synopsis: This Haskell script converts the output of Sigma,-}-}
-{-{-a metagenomic taxnomic profiler, to a specific output format-}-}
-{-{-used in the mosaic community challenge.-}-}
+{-=SigmatoMosaic: A File Format Converter=-}
+{-=Author:  Matthew Mosior=-}
+{-=Synopsis: This Haskell script converts the output of Sigma,=-}
+{-=a metagenomic taxnomic profiler, to a specific output format=-}
+{-=used in the mosaic community challenge.=-}
 
 {-Imports-}
 
@@ -55,13 +55,14 @@ tripletfst (x,_,_) = x
 tripletthird :: (a,b,c) -> c
 tripletthird (_,_,c) = c
 
---quadrupletthird -> For use in sortzeroadder.
-quadrupletthird :: (a,b,c,d) -> c
-quadrupletthird (_,_,c,_) = c
-
 --npletolist -> For use in alltolist.
 npletolist ((a,b,c,d):xs) = a : b : c : d : npletolist xs
-npletolist _ = [] 
+npletolist _ = []
+
+--cmpindex -> For use in sorttaxadder.
+cmpindex :: Eq a => [a] -> [a] -> [a] -> Ordering
+cmpindex correct x y = compare (indexOf x) (indexOf y) 
+    where indexOf s = findIndex (s !! 2 ==) correct
 
 {----------------------------------------------------------}
 
@@ -359,13 +360,18 @@ zeroadder (x:xs) cmdargss = (singlenest $ (x ++ (zip3 first second third))) ++ (
 --taxadder -> To add a the full taxonomic rank to all tuples in all sublists.
 taxadder :: [[(String,String,String)]] -> [[(String,String,String,String)]]
 taxadder [[]] = [[]]
+taxadder []   = [[]]
 taxadder (x:xs) = (singlenest $ (map (\(a,b,c) -> (a,b,c,head (sort (map (tripletfst) x)))) x)) 
                 ++ (taxadder xs) 
 
 --sorttaxadder -> To sort the output of taxadder.
-sorttaxadder :: [[(String,String,String,String)]] -> [[(String,String,String,String)]]
-sorttaxadder [[]] = [[]]
-sorttaxadder xs = map (sortOn quadrupletthird) xs
+sorttaxadder :: [[(String,String,String,String)]] -> [String] -> [[(String,String,String,String)]]
+sorttaxadder [[]] []       = [[]]
+sorttaxadder [[]] cmdargss = [[]]
+sorttaxadder xs   []       = [[]]
+sorttaxadder []   (_:_)    = [[]]
+sorttaxadder xs   cmdargss = map (map (\[a,b,c,d] -> (a,b,c,d))) 
+                            (map (sortBy (cmpindex cmdargss)) (map (map (\(a,b,c,d) -> [a,b,c,d])) xs)) 
 
 --alltolist -> To convert n-tuples to list of lists.
 alltolist :: [[(String,String,String,String)]] -> [[String]]
@@ -403,17 +409,17 @@ finalprintlist xs cmdargss = ("FullTaxonomicRank"
 --run -> Function to download, grab data from assembly reports, 
 --and add to temp file.
 run :: [String] -> [String] -> String -> (FilePath,Handle) -> IO [[String]]
-run [] [] [] temp = return []
-run xs [] [] temp = return []
-run [] ys [] temp = return []
-run [] [] zs temp = return []
-run xs ys [] temp = return []
-run [] ys zs temp = return []
-run xs [] zs temp = return []
+run []     []     [] (tempnamed,temphd) = return []
+run (x:xs) []     [] (tempnamed,temphd) = return []
+run []     (y:ys) [] (tempnamed,temphd) = return []
+run []     []     zs (tempnamed,temphd) = return []
+run (x:xs) (y:ys) [] (tempnamed,temphd) = return []
+run []     (y:ys) zs (tempnamed,temphd) = return []
+run (x:xs) []     zs (tempnamed,temphd) = return []
 run (x:xs) (y:ys) zs (tempnamed,temphd) = do
     --Login to the NCBI FTP Server and download assembly report files.
     handle <- easyConnectFTP "ftp.ncbi.nih.gov"
-    loginAnon handle
+    _ <- loginAnon handle
     preassemblydata <- getlines handle x
     let assemblydata = fst preassemblydata
     --Parse out Taxid from assembly report.
@@ -506,12 +512,22 @@ main = do
                                      --Read temp file into [[String]].
                                      fulltempread <- hGetContents temph
                                      --Get final print ready nested list by applying all functions 
-                                     --in Final Transformation section to fulltempread.
+                                     --in Final Transformation section to fulltempread. 
                                      let final = finalprintlist first second
-                                                   where first  = (specificgrablist (alltolist (sorttaxadder (taxadder (zeroadder (taxgrouper fulltempread) (allfilenameparser cmdargs))))))
+                                                   where first  = (specificgrablist 
+                                                                  (alltolist 
+                                                                  (sorttaxadder 
+                                                                  (taxadder 
+                                                                  (zeroadder 
+                                                                  (taxgrouper fulltempread) 
+                                                                  (allfilenameparser cmdargs))) 
+                                                                  (allfilenameparser cmdargs))))
                                                          second = (allfilenameparser cmdargs)
                                      --Print to mosaic.txt. 
-                                     writeFile "mosaic.txt" $ (render $ (hsep 2 left . map (vcat left) . map (map (text))) (transpose final))
+                                     writeFile "mosaic.txt" $ 
+                                                    (render $ 
+                                                    (hsep 2 left . map (vcat left) . map (map (text))) 
+                                                    (transpose final))
                                      --Close temporary file.
                                      hClose temph
                                      --Delete temporary file.
