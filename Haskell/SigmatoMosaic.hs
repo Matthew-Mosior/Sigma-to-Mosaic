@@ -36,11 +36,6 @@ linefeed xs = map words (lines xs)
 --Define isSubsetOf -> For use in significantgcf.
 xs `isSubsetOf` ys = all (`elem` ys) xs
 
---singlenest -> For use in significantgcf.
-singlenest :: [a] -> [[a]]
-singlenest [] = []
-singlenest xs = [xs]
-
 --allsinglenest -> For use in nesting results 
 --of getlines in getassemblyreport.
 allsinglenest :: [[a]] -> [[a]]
@@ -108,7 +103,7 @@ significantgcf :: [String] -> [[String]] -> [[String]]
 significantgcf [] [[]] = [[]]
 significantgcf [] ys = [[]]
 significantgcf xs [[]] = [[]]
-significantgcf xs ys = filter ((singlenest $ head $ xs) `isSubsetOf`) ys 
+significantgcf xs ys = filter ([(head xs)] `isSubsetOf`) ys 
                      ++ significantgcf (tail xs) ys
 
 --siggcfonly -> To grab just the third element of significantgcf
@@ -127,13 +122,13 @@ siggcfonly xs = (take 1 $ drop 2 $ head $ xs)
 --largeparser -> To prepare the result of siggcfonly for downloading.
 largeparser :: [String] -> [String]
 largeparser [] = []
-largeparser xs = (singlenest $ (subRegex (mkRegex "_genomic.fna_directory") (head xs) "/")) 
+largeparser xs = [(subRegex (mkRegex "_genomic.fna_directory") (head xs) "/")] 
                ++ largeparser (tail xs)
 
 --firstparser -> To prepare the result of siggcfonly for downloading.
 firstparser :: [String] -> [String]
 firstparser [] = [] 
-firstparser xs = (singlenest $ take 3 $ (subRegex (mkRegex "GCF_|\\..*") (head xs) "")) 
+firstparser xs = [(take 3 $ (subRegex (mkRegex "GCF_|\\..*") (head xs) ""))] 
                ++ firstparser (tail xs)
 
 --finalfirstparser -> To prepare the result of siggcfonly for downloading.
@@ -144,7 +139,7 @@ finalfirstparser xs = map (++ "/") (firstparser xs)
 --secondparser -> To prepare the result of siggcfonly for downloading.
 secondparser :: [String] -> [String]
 secondparser [] = []
-secondparser xs = (singlenest $ drop 3 $ take 6 $ (subRegex (mkRegex "GCF_|\\..*") (head xs) "")) 
+secondparser xs = [(drop 3 $ take 6 $ (subRegex (mkRegex "GCF_|\\..*") (head xs) ""))] 
                 ++ secondparser (tail xs)
 
 --finalsecondparser -> To prepare the result of siggcfonly for downloading.
@@ -155,7 +150,7 @@ finalsecondparser xs = map (++ "/") (secondparser xs)
 --thirdparser -> To prepare the result of siggcfonly for downloading.
 thirdparser :: [String] -> [String]
 thirdparser [] = []
-thirdparser xs = (singlenest $ drop 6 $ take 9 $ (subRegex (mkRegex "GCF_|\\..*") (head xs) "")) 
+thirdparser xs = [(drop 6 $ take 9 $ (subRegex (mkRegex "GCF_|\\..*") (head xs) ""))] 
                ++ thirdparser (tail xs)
 
 --finalthirdparser -> To prepare the result of siggcfonly for downloading.
@@ -166,14 +161,14 @@ finalthirdparser xs = map (++ "/") (thirdparser xs)
 --preparser -> To prepare the result of siggcfonly for downloading.
 preparser :: [String] -> [String]
 preparser [] = []
-preparser xs = (singlenest $ (subRegex (mkRegex "^.*") (head xs) url)) 
+preparser xs = [(subRegex (mkRegex "^.*") (head xs) url)] 
              ++ preparser (tail xs)
                  where url = "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/"
 
 --postparser -> To prepare the result of siggcfonly for downloading.
 postparser :: [String] -> [String]
 postparser [] = []
-postparser xs = (singlenest $ (subRegex (mkRegex "$") (head xs) "_assembly_report.txt")) 
+postparser xs = [(subRegex (mkRegex "$") (head xs) "_assembly_report.txt")] 
               ++ postparser (tail xs)
 
 --prefinalparser -> To prepare the result of siggcfonly for downloading.
@@ -190,14 +185,14 @@ prefinalparser xs = zipWith6 (\a b c d e f -> a ++ b ++ c ++ d ++ e ++ f)
 --postfinalparser -> To preset the url to download the assembly report
 postfinalparser :: [String] -> [String]
 postfinalparser [] = []
-postfinalparser xs = (singlenest $ (subRegex (mkRegex "_genomic.fna_directory") (head xs) "")) 
+postfinalparser xs = [(subRegex (mkRegex "_genomic.fna_directory") (head xs) "")] 
                    ++ postfinalparser (tail xs)
 
 --assemblyreport -> Actual URLs once logged into ftp.ncbi.nih.gov
 --to download assembly reports.
 assemblyreport :: [String] -> [String]
 assemblyreport [] = []
-assemblyreport xs = (singlenest $ (subRegex (mkRegex url) (head xs) "")) 
+assemblyreport xs = [(subRegex (mkRegex url) (head xs) "")] 
                   ++ assemblyreport (tail xs)
                       where url = "ftp://ftp.ncbi.nlm.nih.gov/"
 
@@ -209,7 +204,7 @@ grabtaxid xs = filter (isPrefixOf "# Taxid:") xs
 --onlytaxid -> To parse out "# Taxid:" from grabtaxid. 
 onlytaxid :: [String] -> [String]
 onlytaxid [] = []
-onlytaxid xs = (singlenest $ (subRegex (mkRegex "# Taxid:          ") (head xs) "")) 
+onlytaxid xs = [(subRegex (mkRegex "# Taxid:          ") (head xs) "")] 
              ++ onlytaxid (tail xs)
 
 {---------------------------------------------------------------------------}
@@ -220,14 +215,14 @@ onlytaxid xs = (singlenest $ (subRegex (mkRegex "# Taxid:          ") (head xs) 
 --efetchbeginning -> To correctly set up the url for downloading.
 efetchbeginning :: [String] -> [String]
 efetchbeginning [] = []
-efetchbeginning xs = (singlenest $ (subRegex (mkRegex "^") (head xs) url)) 
+efetchbeginning xs = [(subRegex (mkRegex "^") (head xs) url)] 
                    ++ efetchbeginning (tail xs)
                        where url = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=taxonomy&id="
 
 --efetchend -> To correctly set up the url for downloading.
 efetchend :: [String] -> [String]
 efetchend [] = []
-efetchend xs = (singlenest $ (subRegex (mkRegex "$") (head xs) "&mode=text&report=xml")) 
+efetchend xs = [(subRegex (mkRegex "$") (head xs) "&mode=text&report=xml")] 
              ++ efetchend (tail xs)
 
 {------------------------------------------------------}
@@ -300,7 +295,7 @@ finaltaxrankparser xs = map (filter (not . (`elem` "<>TaxId/"))) (finaltaxrank x
 
 --printtaxrank -> To merge each string into one separate with commas.
 printtaxrank :: C.ByteString -> [String]
-printtaxrank xs = singlenest (intercalate "," (finaltaxrankparser xs))
+printtaxrank xs = [intercalate "," (finaltaxrankparser xs)]
 
 {------------------------------------------------------------------------}
 
@@ -315,7 +310,7 @@ filenameparser xs = subRegex (mkRegex "^.*/") xs ""
 --the filename for all command line arguments.
 allfilenameparser :: [String] -> [String]
 allfilenameparser [] = [] 
-allfilenameparser xs = (singlenest $ (subRegex (mkRegex "^.*/") (head xs) "")) 
+allfilenameparser xs = [(subRegex (mkRegex "^.*/") (head xs) "")] 
                      ++ (allfilenameparser (tail xs))
 
 {--------------------------------------------------}
@@ -352,7 +347,7 @@ zeroadder [[]]    ys = [[]]
 zeroadder (x:xs)  [] = [[]]
 zeroadder []   (_:_) = [[]]
 zeroadder []      [] = [[]]
-zeroadder (x:xs) cmdargss = (singlenest $ (x ++ (zip3 first second third))) ++ (zeroadder xs cmdargss)  
+zeroadder (x:xs) cmdargss = [(x ++ (zip3 first second third))] ++ (zeroadder xs cmdargss)  
                               where first  = (replicate (length $ (cmdargss \\ (map (tripletthird) x))) "NULL")
                                     second = (replicate (length $ (cmdargss \\ (map (tripletthird) x))) "0.00000000000000000000")
                                     third  = (cmdargss \\ (map (tripletthird) x))
@@ -361,7 +356,7 @@ zeroadder (x:xs) cmdargss = (singlenest $ (x ++ (zip3 first second third))) ++ (
 taxadder :: [[(String,String,String)]] -> [[(String,String,String,String)]]
 taxadder [[]] = [[]]
 taxadder []   = [[]]
-taxadder (x:xs) = (singlenest $ (map (\(a,b,c) -> (a,b,c,head (sort (map (tripletfst) x)))) x)) 
+taxadder (x:xs) = [(map (\(a,b,c) -> (a,b,c,head (sort (map (tripletfst) x)))) x)]
                 ++ (taxadder xs) 
 
 --sorttaxadder -> To sort the output of taxadder.
@@ -382,7 +377,7 @@ alltolist xs = map (npletolist) xs
 specificgrablist :: [[String]] -> [[String]]
 specificgrablist [[]] = [[]]
 specificgrablist [] = [[]]
-specificgrablist (x:xs) = (singlenest $ (x !! 3 : x !! 1 : x !! 5 : x !! 9 : x !! 13 : [])) 
+specificgrablist (x:xs) = [(x !! 3 : x !! 1 : x !! 5 : x !! 9 : x !! 13 : [])]
                         ++ (specificgrablist xs)
 
 --finalprintlist -> Put a header at the beginning of specificgrablist.
@@ -433,7 +428,7 @@ run (x:xs) (y:ys) zs (tempnamed,temphd) = do
     --Parse efetchdata and grab TaxId if it belongs to major Taxonomic Rank.
     let fullrank = printtaxrank efetchdata
     --Add Current relative abundance to end of fullrank.
-    let finaldata = fullrank ++ (singlenest y) ++ (singlenest zs)
+    let finaldata = fullrank ++ [y] ++ [zs]
     --Create intercalate finaldata into one string with spaces.
     let truefinaldata = intercalate " " finaldata
     --Add finaldata to temp.txt.
