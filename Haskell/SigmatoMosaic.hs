@@ -24,17 +24,15 @@ import System.IO
 
 {---------}
    
-{-Pure Functions.-} 
+{-General utility functions.-}
+
+--Define isSubsetOf -> For use in significantgcf.
+xs `isSubsetOf` ys = all (`elem` ys) xs
 
 --linefeed -> To feed file into nested list line by line, 
 --delimited by whitespace.
 linefeed :: String -> [[String]]
 linefeed xs = map words (lines xs)
-
-{-General utility functions.-}
-
---Define isSubsetOf -> For use in significantgcf.
-xs `isSubsetOf` ys = all (`elem` ys) xs
 
 --allsinglenest -> For use in nesting results 
 --of getlines in getassemblyreport.
@@ -59,7 +57,7 @@ cmpindex :: Eq a => [a] -> [a] -> [a] -> Ordering
 cmpindex correct x y = compare (indexOf x) (indexOf y) 
     where indexOf s = findIndex (s !! 2 ==) correct
 
-{----------------------------------------------------------}
+{----------------------------}
 
 {-Functions to grab significant organisms relative abundances.-}
 
